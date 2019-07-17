@@ -1,5 +1,12 @@
-@extends('layout')
-<p>here should be user info</p>
+@extends('layouts.app')
+
+
 @section('content')
-    //todo: show user information
+
+    @foreach($users as $user)
+        <br>
+         {{$user}}
+        <br>
+    @endforeach
+
 @endsection
