@@ -44,4 +44,9 @@ return [
         ],
     ],
 
+    'currency' => [
+        'url' => 'https://free.currencyconverterapi.com/api/v5/convert',
+        'key' => '74d55d32b78ff5e84abb'
+    ],
+
 ];

@@ -24,3 +24,7 @@ Route::get('/users','ContentController@users');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/wallet/create','WalletController@create');
+
+Route::post('/wallet/create','WalletController@store');
