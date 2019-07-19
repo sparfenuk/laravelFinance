@@ -15,7 +15,10 @@
                                 <br>
                             @endforeach
                     </div>
+
                 </div>
+                <div class="pb-5"> </div>
+                <a class="btn btn-primary float-right" href="{{url('wallet/create')}}" role="button">Add wallet</a>
             </div>
         </div>
     </div>

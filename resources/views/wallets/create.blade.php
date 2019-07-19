@@ -7,6 +7,7 @@
                 <h1>Create new wallet</h1>
             <form method="post" action="create">
                 @csrf
+                <div class="pb-5"> </div>
                 <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Currency') }}</label>
                 <div class="form-group">
                     <select class="form-control m-bot15" name="currency_id">
@@ -18,7 +19,8 @@
                             No Record Found
                         @endif
                     </select>
-                    <button type="submit">Create</button>
+                    <div class="pb-5"> </div>
+                    <button class="btn-primary float-right" type="submit">Create</button>
                     {{--<label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>--}}
 
                     {{--<div class="col-md-6">--}}

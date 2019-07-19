@@ -20,7 +20,7 @@ class WalletController extends Controller
 
         $user_id = auth()->id();
         $user = User::find($user_id);
-        return view('wallets')->with('wallets',$user->wallets);
+        return view('wallets.showAll')->with('wallets',$user->wallets);
     }
 
     /**
@@ -30,9 +30,9 @@ class WalletController extends Controller
      */
     public function create()
     {
-         if(auth()->id() == null)
+         if(auth()->id() == NULL)
          {
-             //TODO: redirect
+             return redirect('home');
          }
          else {
              $currencies = Currency::all();
@@ -53,6 +53,7 @@ class WalletController extends Controller
         $wallet->currency_id = $request['currency_id'];
         $wallet->timestamps = now();
         $wallet->save();
+       return redirect('wallets');
     }
 
 

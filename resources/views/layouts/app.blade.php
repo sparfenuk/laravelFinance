@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Finance') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -24,7 +24,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Finance') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -33,9 +33,23 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li><a  class="navbar-brand" href="{{url('/wallets')}}">Wallets</a></li>
                     </ul>
+                <div class="navbar-nav ml-auto">
+                    @php
+                        {{
+                         $data = App\Currency::getExchangeRate();
+                         foreach ($data['exchangeRate'] as $value)
+                          {
+                              if (array_key_exists('currency',$value) && ($value['currency'] === 'EUR' || $value['currency'] === 'USD'))
+                              {
+                               echo ($value['saleRateNB'].'  /  '.$value['purchaseRateNB'].' '.$value['currency'].'<br>');
+                              }
+                          }
+                        }}
+                    @endphp
 
+                </div>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -54,7 +68,13 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
+
+
+
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/wallets') }}">
+                                        {{ __('Wallets') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
