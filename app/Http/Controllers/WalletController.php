@@ -20,6 +20,7 @@ class WalletController extends Controller
 
         $user_id = auth()->id();
         $user = User::find($user_id);
+
         return view('wallets.showAll')->with('wallets',$user->wallets);
     }
 

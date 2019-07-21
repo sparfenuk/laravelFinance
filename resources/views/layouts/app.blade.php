@@ -11,6 +11,23 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    {{--<script src="{{asset('js/currency.js')}}" defer></script>--}}
+    <script>
+
+        $(document).ready(function getMessage() {
+
+                     $.ajax({
+                         type:'GET',
+                         url:'/currencies',
+                         success:function(data) {
+                             console.log(data);
+                            // $("#currency").html(data);
+                         }});
+
+                 });
+
+    </script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -35,19 +52,8 @@
                     <ul class="navbar-nav mr-auto">
                         <li><a  class="navbar-brand" href="{{url('/wallets')}}">Wallets</a></li>
                     </ul>
-                <div class="navbar-nav ml-auto">
-                    @php
-                        {{
-                         $data = App\Currency::getExchangeRate();
-                         foreach ($data['exchangeRate'] as $value)
-                          {
-                              if (array_key_exists('currency',$value) && ($value['currency'] === 'EUR' || $value['currency'] === 'USD'))
-                              {
-                               echo ($value['saleRateNB'].'  /  '.$value['purchaseRateNB'].' '.$value['currency'].'<br>');
-                              }
-                          }
-                        }}
-                    @endphp
+
+                <div id="currency" class="navbar-nav ml-auto">
 
                 </div>
                     <!-- Right Side Of Navbar -->
