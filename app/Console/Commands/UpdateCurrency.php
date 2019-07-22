@@ -38,7 +38,7 @@ class UpdateCurrency extends Command
      */
     public function handle()
     {
-        Currency::query()->truncate();//purging table
+        //Currency::query()->truncate();//purging table
         $date = date('d.m.Y');
         $json = file_get_contents('https://api.privatbank.ua/p24api/exchange_rates?json&date=' . $date);
         $data = json_decode($json, true);

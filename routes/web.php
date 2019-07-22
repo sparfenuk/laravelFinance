@@ -33,3 +33,4 @@ Route::get('/wallets','WalletController@index');
 
 Route::get('/currencies','HomeController@getCurrenciesSection');
 
+Route::get('/getLastCurrencies','HomeController@getLastCurrencies')->name('getLastCurrencies');
