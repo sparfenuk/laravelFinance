@@ -86,7 +86,7 @@
         <div class="title m-b-md">
             Your Finances
         </div>
-        <div id="chart"></div>
+        <div id="chart" style="width: 110%"></div>
     </div>
 
 </div>
@@ -111,21 +111,32 @@
             axis: {
                 y: {
                     label: { // ADD
-                        text: 'Sale rate',
+                        text: 'Sale rate to UAH',
                         position: 'outer-middle'
                     }
                 }
             }
         });
-
+        function swap(arra) {
+            [arra[0], arra[arra.length - 1]] = [arra[arra.length - 1], arra[0]];
+            return arra;
+        }
         $.ajax({
             url:'{{ route('getLastCurrencies') }}',
             success: function(result){
                     console.log(result);
+                    var data = [];
                     $.each(result, function (i,currency) {
-                         columns.push(currency['currency']);
+                        data.push(swap(currency['data'].split(';').concat(currency['currency'])));
 
                     });
+                    setTimeout(function () {
+                        chart.load({
+                            columns: data,
+                            unload:['data1' ,'data2']
+                        });
+                        console.log(data);
+                    },2000);
 
 
 

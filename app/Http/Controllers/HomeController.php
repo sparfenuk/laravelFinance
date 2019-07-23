@@ -49,7 +49,15 @@ class HomeController extends Controller
             group by currency
             order by created_at
          */
-        $currencies = DB::select(DB::raw('SELECT currency,  GROUP_CONCAT(sale_rate SEPARATOR \';\'), created_at FROM currencies group by currency order by created_at'));
+        $currencies = DB::select("SELECT `currency`,  GROUP_CONCAT(`sale_rate` SEPARATOR ';') as data, avg(created_at) as created_at
+            FROM `laravel`.`currencies`
+            group by currency
+            having AVG (created_at)");
+//        $currencies = DB::table('currencies')
+//            ->select(DB::raw(('currency,  GROUP_CONCAT(sale_rate SEPARATOR \';\') as data')))
+//            ->groupBy(['currency'])
+//            ->havingRaw('AVG (created_at)')
+//            ->get();
         return new JsonResponse($currencies,200);
     }
 }
