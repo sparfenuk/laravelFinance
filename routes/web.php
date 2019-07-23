@@ -33,6 +33,7 @@ Route::get('/wallet/create','WalletController@create');
 Route::post('/wallet/create','WalletController@store');
 
 Route::get('/wallets','WalletController@index');
+Route::any('/wallets','WalletController@index')->name('wallets');
 
 Route::get('/currencies','HomeController@getCurrenciesSection');
 

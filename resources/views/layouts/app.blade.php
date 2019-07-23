@@ -21,14 +21,21 @@
                          type:'GET',
                          url:'/currencies',
                          success:function(data) {
-                             console.log(data);
-                            // $("#currency").html(data);
-                         }});
+
+                             var usd = data.USD.purchase_rate+" / "+ data.USD.sale_rate + " " + data.USD.currency;
+                             var eur = data.EUR.purchase_rate +" / "+ data.EUR.sale_rate + " " + data.EUR.currency;
+                             $("#usd").text(usd);
+                             $("#eur").text(eur);
+                         },
+                         error:function () {
+                             console.error()
+                         }
+                     });
 
                  });
 
     </script>
-
+    @yield('javascripts')
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -49,12 +56,15 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    @auth
                     <ul class="navbar-nav mr-auto">
                         <li><a  class="navbar-brand" href="{{url('/wallets')}}">Wallets</a></li>
                     </ul>
+                    @endauth
 
-                <div id="currency" class="navbar-nav ml-auto">
-
+                <div class="container ml-auto">
+                    <div id="usd" class="text-info "></div>
+                    <div id="eur" class="text-info "></div>
                 </div>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -107,4 +117,5 @@
         </main>
     </div>
 </body>
+
 </html>

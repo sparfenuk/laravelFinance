@@ -16,6 +16,8 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name')->default('wallet');
+            $table->mediumText('description')->nullable();
             $table->double('balance')->default(0);
             $table->integer('user_id');
             $table->integer('currency_id');

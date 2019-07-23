@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Currency;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -34,12 +36,7 @@ class HomeController extends Controller
         $eur = Currency::where('currency','EUR')->first();
         $usd = Currency::where('currency','USD')->first();
 
-        $response = [
-            'EUR' => $eur,
-            'USD' => $usd,
-        ];
-
-        return($response);
+        return \response()->json([ 'EUR' => $eur, 'USD' => $usd, ],200);
     }
 
     public function getLastCurrencies(){
