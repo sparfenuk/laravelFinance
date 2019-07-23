@@ -15,6 +15,10 @@ class UserController extends Controller
 {
     public function profile()
     {
+        if(Auth::user() == NULL)
+        {
+            return redirect('home');
+        }
         return view('profile',array('user'=>Auth::user()));
     }
     public function update_avatar(Request $request){
@@ -29,4 +33,5 @@ class UserController extends Controller
         }
         return view('profile', array('user' => Auth::user()) );
     }
+
 }
