@@ -25,6 +25,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('profile','UserController@profile');
+Route::post('profile','UserController@update_avatar');
+
 Route::get('/wallet/create','WalletController@create');
 
 Route::post('/wallet/create','WalletController@store');
