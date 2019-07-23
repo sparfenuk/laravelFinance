@@ -28,12 +28,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('profile','UserController@profile');
 Route::post('profile','UserController@update_avatar');
 
-Route::get('/wallet/create','WalletController@create');
-
-Route::post('/wallet/create','WalletController@store');
+//Route::get('/wallet/create','WalletController@create');
+//
+//Route::post('/wallet/create','WalletController@store');
 
 Route::get('/wallets','WalletController@index');
+
 Route::any('/wallets','WalletController@index')->name('wallets');
+
+//Route::post('wallet/destroy', 'WalletController@destroy')->name('wallets.destroy');
 
 Route::get('/currencies','HomeController@getCurrenciesSection');
 

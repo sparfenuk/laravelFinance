@@ -10,6 +10,8 @@
                     <div id="wallets" class="col-md-12 row flex-nowrap">
                             @foreach($wallets as $wallet)
                                 <div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded">
+                                    <span class="delete_wallet_btn float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span>
+                                    <div hidden id="wallet_id">{{$wallet->id}}</div>
                                     <p class="text-light">{{$wallet->name}}</p>
                                     <p class="text-light">{{$wallet->description}}</p>
                                 <span class="text-light">balance : {{$wallet->balance.' '.$wallet->currency->currency}}</span>
@@ -41,9 +43,10 @@
                 <div class="modal-body">
                     <form  id="createform" method="post" >
                         @csrf
+
                         <p id="name_error"></p>
                         <label for="wallet_name">name   <span class="text-warning">*</span></label>
-                        <input id="wallet_name" class="form-control m-bot15" type="text" name="wallet_name"/>
+                        <input id="wallet_name" class="form-control m-bot15" type="text" name="wallet_name" required/>
 
                         <p id="description_error"></p>
                         <label for="wallet_description">description</label>
@@ -63,7 +66,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="btnconfirm" value="Add" data-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="add_wallet_btn" value="Add" data-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>
@@ -72,18 +75,18 @@
 @section('javascripts')
     <script>
         $(document).ready(function() {
+            //add wallet
+            $("#add_wallet_btn").click(function () {
 
-            $("#btnconfirm").click(function () {
-
-                var error_name = $("#name_error");
-                var error_description = $("#description_error");
-
-                error_name.text('');
-                error_description.text('');
-
-                 console.log('allo');
-                 console.log($("#wallet_name").val());
-                 console.log($("#wallet_description").val());
+                // var error_name = $("#name_error");
+                // var error_description = $("#description_error");
+                //
+                // error_name.text('');
+                // error_description.text('');
+                //
+                //  console.log('allo');
+                //  console.log($("#wallet_name").val());
+                //  console.log($("#wallet_description").val());
 
                 $.ajax({
                     data: {
@@ -95,8 +98,8 @@
 
                     success: function (data) {
 
-                        var des = data.description;
-                        if(des == null)
+                        var des = data.wallet_description;
+                        if(des === undefined)
                         des = " ";
 
                         var wallet = '<div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded">\n' +
@@ -122,6 +125,35 @@
                         console.error();
                     }
                 });
+            });
+            //delete wallet
+            $(".delete_wallet_btn").click(function () {
+
+
+                var id = parseInt(this.parentNode.childNodes.item(2).innerText);
+                  var node = this.parentNode.parentNode;
+                  var child_to_remove = this.parentNode;
+
+                console.log(id);
+
+                $.ajax({
+                    type:'delete',
+                    method:'delete',
+                    data: {
+                        'wallet_id': id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    },
+                   success: function(data) {
+                        node.removeChild(child_to_remove);
+                    },
+                    error: function () {
+
+                    }
+
+                });
+                return false;
             });
         });
 </script>

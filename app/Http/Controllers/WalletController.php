@@ -19,7 +19,13 @@ class WalletController extends Controller
      */
     public function index(Request $request)
     {
+        if($request->isMethod('delete'))
+        {
+            //Wallet::where('id',$request['wallet_id'])->delete;
+           return new JsonResponse(['succes'=>$request['wallet_id']],200);
+        }
         if($request->ajax()) {
+
 
             $request->validate([
                 'wallet_name' => 'required|max:14',
@@ -165,11 +171,13 @@ class WalletController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($request)
     {
-        //
+        if ($request->ajax())
+        {}
+        return new JsonResponse('success',200);
     }
 }
