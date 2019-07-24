@@ -88,7 +88,6 @@
         </div>
         <div id="chart" style="width: 110%"></div>
     </div>
-
 </div>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -96,19 +95,36 @@
 <script src="{{ asset('c3/c3.min.js') }}"></script>
 <script>
     $(document).ready(function() {
+        var dates = [];
 
+        var data = [];
+
+        $.each({!! json_encode($dates) !!},function (i,date) {
+            dates.push(date['created_at'].toString());
+        });
+
+        $.each({!! $currencies !!}, function (i,currency){
+                var tempData = (currency['data'].split(';').concat(currency['currency']));
+                tempData.unshift(tempData.pop());
+                data.push(tempData);
+        });
+        dates.unshift("x");
+        data.unshift(dates);
         var chart = c3.generate({
-            bindto: '#chart',
             data: {
-                columns: [
-                    ['data1', 30, 200, 100, 400, 150, 250],
-                    ['data2', 50, 20, 10, 40, 15, 25]
-                ],
-                axes: {
-                    data2: 'y2'
-                }
+                x : 'x',
+                columns: data,
+                type: 'line'
             },
             axis: {
+                x: {
+                    type: 'timeseries', // this needed to load string x value
+                    tick: {
+                        format: '%Y-%m-%d',
+                        rotate: -50,
+                        multiline: false,
+                    }
+                },
                 y: {
                     label: { // ADD
                         text: 'Sale rate to UAH',
@@ -117,31 +133,31 @@
                 }
             }
         });
-        function swap(arra) {
-            [arra[0], arra[arra.length - 1]] = [arra[arra.length - 1], arra[0]];
-            return arra;
-        }
-        $.ajax({
-            url:'{{ route('getLastCurrencies') }}',
-            success: function(result){
-                    console.log(result);
-                    var data = [];
-                    $.each(result, function (i,currency) {
-                        data.push(swap(currency['data'].split(';').concat(currency['currency'])));
+        {{--$.ajax({--}}
+        {{--    url:'{{ route('getLastCurrencies') }}',--}}
+        {{--    success: function(result){--}}
 
-                    });
-                    setTimeout(function () {
-                        chart.load({
-                            columns: data,
-                            unload:['data1' ,'data2']
-                        });
-                        console.log(data);
-                    },2000);
+        {{--            var data = [];--}}
+
+        {{--            $.each(result, function (i,currency) {--}}
+        {{--                var tempData = (currency['data'].split(';').concat(currency['currency']));--}}
+        {{--                tempData.unshift(tempData.pop());--}}
+        {{--                data.push(tempData);--}}
+        {{--            });--}}
+        {{--            //data.unshift(dates);--}}
+        {{--            console.log(data);--}}
+        {{--            setTimeout(function () {--}}
+        {{--                chart.load({--}}
+        {{--                    columns: [--}}
+        {{--                        //dates,--}}
+        {{--                        data,--}}
+        {{--                    ]--}}
+        {{--                });--}}
+        {{--            },5000);--}}
 
 
-
-                }
-        });
+        {{--        }--}}
+        {{--});--}}
 
     });
 

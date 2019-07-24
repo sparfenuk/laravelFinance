@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/','HomeController@welcome');
 
 Route::get('user',function (){
    return view('userInfo');
@@ -40,4 +38,4 @@ Route::any('/wallets','WalletController@index')->name('wallets');
 
 Route::get('/currencies','HomeController@getCurrenciesSection');
 
-Route::get('/getLastCurrencies','HomeController@getLastCurrencies')->name('getLastCurrencies');
+Route::any('getLastCurrencies','HomeController@getLastCurrencies')->name('getLastCurrencies');
