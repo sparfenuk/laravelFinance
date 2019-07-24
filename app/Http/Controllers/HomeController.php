@@ -50,8 +50,8 @@ class HomeController extends Controller
     public function getCurrenciesSection()
     {
 
-        $eur = Currency::where('currency','EUR')->first();
-        $usd = Currency::where('currency','USD')->first();
+        $eur = Currency::where('currency','EUR')->orderBy('id','desc')->first();
+        $usd = Currency::where('currency','USD')->orderBy('id','desc')->first();
 
         return \response()->json([ 'EUR' => $eur, 'USD' => $usd, ],200);
     }

@@ -9,7 +9,7 @@
                 <form enctype="multipart/form-data" action="/profile" method="POST">
                     <label>Profile Image</label><br>
                     <input type="file" name="avatar"><br>
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    @csrf
                     <br>
                     <input type="submit" class="pull-right btn btn-sm btn-primary">
                 </form>
