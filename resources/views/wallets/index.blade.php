@@ -9,7 +9,8 @@
                     <div class="card-header ">Wallets</div>
                     <div id="wallets" class="col-md-12 row flex-nowrap">
                             @foreach($wallets as $wallet)
-                                <div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded">
+                                <div  class="d-inline-block bg-dark  col-3 m-2 p-4 rounded wallet_body">
+                                    <a href="{{route('wallet',['id'=>$wallet->id])}}"></a>
                                     <span class="delete_wallet_btn float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span>
                                     <div hidden id="wallet_id">{{$wallet->id}}</div>
                                     <p class="text-light">{{$wallet->name}}</p>
@@ -45,7 +46,7 @@
                         @csrf
 
                         <p id="name_error"></p>
-                        <label for="wallet_name">name   <span class="text-warning">*</span></label>
+                        <label for="wallet_name">name</label>
                         <input id="wallet_name" class="form-control m-bot15" type="text" name="wallet_name" required/>
 
                         <p id="description_error"></p>
@@ -75,18 +76,14 @@
 @section('javascripts')
     <script>
         $(document).ready(function() {
+
+            $(".wallet_body").click(function() {
+                window.location = $(this).find("a").attr("href");
+                return false;
+            });
+
             //add wallet
             $("#add_wallet_btn").click(function () {
-
-                // var error_name = $("#name_error");
-                // var error_description = $("#description_error");
-                //
-                // error_name.text('');
-                // error_description.text('');
-                //
-                //  console.log('allo');
-                //  console.log($("#wallet_name").val());
-                //  console.log($("#wallet_description").val());
 
                 $.ajax({
                     data: {
@@ -95,16 +92,11 @@
                         'currency_id': $("#currency_id :selected").val()
 
                     },
-
                     success: function (data) {
 
-                        var des = data.wallet_description;
-                        if(des === undefined)
-                        des = " ";
-
                         var wallet = '<div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded">\n' +
-                            '<p class="text-light">' + data.wallet_name +'</p>' +
-                            '<p class="text-light">' + des +'</p>'+
+                            '<p class="text-light">' + (data.wallet_name == null? " ":data.wallet_name) +'</p>' +
+                            '<p class="text-light">' + (data.wallet_description == null? " ":data.wallet_description) +'</p>'+
                             '<span class="text-light">balance : '+data.balance+' '+data.currency+'</span>\n' +
                             '</div>';
 
@@ -113,16 +105,17 @@
                         console.log('success');
                     },
                     error: function (data) {
-                        // var errors = data.responseJSON.errors;
-                        // if(data.wallet_name !== undefined)
-                        // {
-                        //     alert(data.wallet_name[0]);
-                        // }
-                        // if(data.wallet_description !== undefined)
-                        // {
-                        //     alert(data.wallet_description[0]);
-                        // }
-                        console.error();
+                        var errors = data.responseJSON.errors;
+                        var display_error = "";
+                        if(errors.hasOwnProperty("wallet_name"))
+                        {
+                            display_error = errors.wallet_name["0"];
+                        }
+                        if(errors.hasOwnProperty("wallet_description"))
+                        {
+                            display_error += "\n"+errors.wallet_description["0"];
+                        }
+                        alert(display_error);
                     }
                 });
             });
@@ -148,8 +141,8 @@
                    success: function(data) {
                         node.removeChild(child_to_remove);
                     },
-                    error: function () {
-
+                    error: function (data) {
+                        console.log(data);
                     }
 
                 });

@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-
-class CreateWalletsTable extends Migration
+class CreatePeriodsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +13,11 @@ class CreateWalletsTable extends Migration
      */
     public function up()
     {
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('periods', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->default('wallet')->nullable();
-            $table->mediumText('description')->nullable();
-            $table->double('balance')->default(0);
-            $table->integer('user_id');
-            $table->integer('currency_id');
+            $table->string('name');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -33,6 +27,6 @@ class CreateWalletsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wallets');
+        Schema::dropIfExists('periods');
     }
 }

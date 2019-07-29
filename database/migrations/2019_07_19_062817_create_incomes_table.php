@@ -17,11 +17,11 @@ class CreateIncomesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name')->nullable();
             $table->string('description' , 1024)->nullable();
-            $table->enum('once_per',['hour' , 'day' , 'week', '2weeks', '4weeks' , 'month', 'year']);
             $table->bigInteger('value');
             $table->integer('user_id');
             $table->integer('wallet_id');
-
+            $table->integer('period_id');
+            $table->timestamps();
         });
     }
 

@@ -49507,8 +49507,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/SP/PhpstormProjects/laravelFinance/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/SP/PhpstormProjects/laravelFinance/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! c:\OSPanel\domains\laravelFinance\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! c:\OSPanel\domains\laravelFinance\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
