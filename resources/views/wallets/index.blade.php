@@ -94,7 +94,9 @@
                     },
                     success: function (data) {
 
-                        var wallet = '<div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded">\n' +
+                        var wallet = '<div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded wallet_body">\n' +
+                            '<a href="wallet/'+ data.wallet_id +'"></a>'+
+                            '<span class="delete_wallet_btn float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span>\n' +
                             '<p class="text-light">' + (data.wallet_name == null? " ":data.wallet_name) +'</p>' +
                             '<p class="text-light">' + (data.wallet_description == null? " ":data.wallet_description) +'</p>'+
                             '<span class="text-light">balance : '+data.balance+' '+data.currency+'</span>\n' +

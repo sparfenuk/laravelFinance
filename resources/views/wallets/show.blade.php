@@ -4,7 +4,8 @@
  <div class="container">
 
      <div id="wallet_info" class="col-md-5 d-inline-block">
-         <p id="wallet_id" class="font-weight-bold  text-wallet-info">Id: {{$wallet->id}}</p>
+         <input id="wallet_id" value="{{$wallet->id}}" hidden/>
+         <p  class="font-weight-bold  text-wallet-info">Id: {{$wallet->id}}</p>
          <p class="font-weight-bold  text-wallet-info">Name: {{$wallet->name}}</p>
          <p class="font-weight-bold  text-wallet-info">Description: {{$wallet->description}}</p>
          <p class="font-weight-bold  text-wallet-info">Balance: {{$wallet->balance}}</p>
@@ -177,7 +178,7 @@
                         'income_description':$("#income_description").val(),
                         'income_value':$("#income_value").val(),
                         'period_id':$("#period_id_income").val(),
-                        'wallet_id':$("#wallet_id").text(),
+                        'wallet_id':$("#wallet_id").val(),
                     },
                     success: function (data) {
                         var income = '<tr>\n' +
@@ -192,6 +193,7 @@
 
                     },
                     error:function (data) {
+
                         var errors = data.responseJSON.errors;
                         var display_error = "";
                         if(errors.hasOwnProperty("income_name"))
@@ -217,7 +219,7 @@
                         'expense_description':$("#expense_description").val(),
                         'expense_value':$("#expense_value").val(),
                         'period_id':$("#period_id_income").val(),
-                        'wallet_id':$("#wallet_id").text(),
+                        'wallet_id':$("#wallet_id").val(),
                     },
                     success: function (data) {
                         var expense = '<tr>\n' +

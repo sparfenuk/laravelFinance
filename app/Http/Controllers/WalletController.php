@@ -52,6 +52,7 @@ class WalletController extends Controller
             $wallet->save();
 
             $json = [
+                'wallet_id' => $wallet->id,
                 'wallet_name'=>$wallet->name,
                 'wallet_description'=>$wallet->description,
                 'currency' => $wallet->currency->currency,
