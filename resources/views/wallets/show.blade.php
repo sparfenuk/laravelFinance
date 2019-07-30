@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
- <div class="container">
+ <div class="container p-4" style="background-color:#e1e1e1">
 
      <div id="wallet_info" class="col-md-5 d-inline-block">
          <input id="wallet_id" value="{{$wallet->id}}" hidden/>
@@ -16,44 +16,44 @@
      </div>
 
      {{--incomes--}}
-     <div id="incomes" class="m-md-3">
+     <div id="incomes" class="m-md-3 p-4" style="border: 2px solid grey; background: grey">
         <h3 class="d-inline-block m-3">Incomes</h3>
 
          <img class="d-inline-block button"  data-toggle="modal" data-target="#incomeModal"  style="cursor: pointer" src="https://img.icons8.com/android/24/000000/plus.png">
-         <img class="d-inline-block button" style="cursor: pointer" src="https://img.icons8.com/material-sharp/24/000000/minus.png">
-         <table id="incomes_table" class="table-bordered table-dark w-100">
+           <table id="incomes_table" class="table-bordered table-dark w-100" >
              <tr>
                  <th>Name</th>
                  <th>Description</th>
                  <th>Frequency</th>
                  <th>Value</th>
+                 <th></th>
              </tr>
              @if($incomes->count() > 0)
              @foreach($incomes as $income)
-                <tr>
+                <tr >
                     <td>{{$income->name}}</td>
                     <td>{{$income->description}}</td>
                     <td>{{$income->period->name}}</td>
                     <td>{{$income->value}}</td>
+                    <td id="income_id" hidden>{{$income->id}}</td>
+                    <td><span class="float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span></td>
                 </tr>
              @endforeach
-             @else
-                 No Record Found
              @endif
          </table>
      </div>
 
      {{--expenses--}}
-      <div id="expenses" class="m-md-3">
+      <div id="expenses" class="m-md-3 p-4" style="border: 2px solid grey; background: grey">
          <h3 class="d-inline-block m-3">Expenses</h3>
          <img class="d-inline-block button" data-toggle="modal" data-target="#expenseModal" style="cursor: pointer" src="https://img.icons8.com/android/24/000000/plus.png">
-         <img class="d-inline-block" style="cursor: pointer" src="https://img.icons8.com/material-sharp/24/000000/minus.png">
          <table id="expenses_table" class="table-bordered table-dark w-100">
              <tr>
                  <th>Name</th>
                  <th>Description</th>
                  <th>Frequency</th>
                  <th>Value</th>
+                 <th></th>
              </tr>
              @if($expenses->count() > 0)
              @foreach($expenses as $expense)
@@ -62,10 +62,10 @@
                      <td>{{$expense->description}}</td>
                      <td>{{$expense->period->name}}</td>
                      <td>{{$expense->value}}</td>
+                     <td id="expense_id" hidden>{{$expense->id}}</td>
+                     <td><span class="float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span></td>
                  </tr>
              @endforeach
-             @else
-                 No Record Found
              @endif
          </table>
      </div>
@@ -184,11 +184,14 @@
                         'wallet_id':$("#wallet_id").val(),
                     },
                     success: function (data) {
+
                         var income = '<tr>\n' +
                             '<td>'+(data.income_name == null ? " ":data.income_name)+'</td>\n' +
                             '<td>'+(data.income_description == null? " ":data.income_description)+'</td>\n' +
                             '<td>'+(data.income_period == null ? " ":data.income_period)+'</td>\n' +
                             '<td>'+(data.income_value == null ? " ":data.income_value)+'</td>\n' +
+                            '<td id="income_id" hidden>'+ data.income_id +'</td>'+
+                            '<td><span class="delete_wallet_btn float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span></td>' +
                             '</tr>';
 
                         var table = $("#incomes_table").append(income);
@@ -212,6 +215,36 @@
                     }
                 });
          });
+            //delete income
+            $("#incomes_table").on('click','span',function () {
+                //this.parentNode.parentNode.childNodes.item(8).val()
+               var id =$(this.parentNode.parentNode).find("#income_id").html();
+               var node = this.parentNode.parentNode.parentNode;
+               var child_to_remove = this.parentNode.parentNode;
+
+                //console.log(id);
+        
+                $.ajax({
+                    'type':'delete_income',
+                    method:'delete',
+                    data:{
+                        'income_id':id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    },
+                    success:function (data) {
+                        node.removeChild(child_to_remove);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+                
+
+            });
+
         //adding expenses
         $("#add_expense_btn").click(function () {
                 $.ajax({
@@ -230,6 +263,8 @@
                             '<td>'+(data.expense_description == null? " ":data.expense_description)+'</td>\n' +
                             '<td>'+(data.expense_period == null ? " ":data.expense_period)+'</td>\n' +
                             '<td>'+(data.expense_value == null ? " ":data.expense_value)+'</td>\n' +
+                            '<td id="expense_id" hidden>'+ data.expense_id +'</td>' +
+                            '<td><span class="float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span></td>' +
                             '</tr>';
 
                         var table = $("#expenses_table").append(expense);
@@ -252,6 +287,35 @@
 
                     }
                 });
+            });
+            //delete expense
+            $("#expenses_table").on('click','span',function () {
+                //this.parentNode.parentNode.childNodes.item(8).val()
+                var id =$(this.parentNode.parentNode).find("#expense_id").html();
+                var node = this.parentNode.parentNode.parentNode;
+                var child_to_remove = this.parentNode.parentNode;
+
+                //console.log(id);
+
+                $.ajax({
+                    'type':'delete_expense',
+                    method:'delete',
+                    data:{
+                        'expense_id':id
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    },
+                    success:function (data) {
+                        node.removeChild(child_to_remove);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
+                    }
+                });
+
+
             });
         });
         function formatDate(date) {

@@ -30,7 +30,7 @@ Route::post('profile','UserController@update_avatar');
 
 Route::any('/wallets','WalletController@index')->name('wallets');
 
-Route::get('/wallet/{id}','WalletController@show')->name('wallet');
+Route::any('/wallet/{id}','WalletController@show')->name('wallet');
 
 //Route::get('/wallet/create','WalletController@create');
 

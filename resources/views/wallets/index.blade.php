@@ -77,10 +77,14 @@
     <script>
         $(document).ready(function() {
 
-            $(".wallet_body").click(function() {
+            $('#wallets').on('click','div',function () {
                 window.location = $(this).find("a").attr("href");
                 return false;
             });
+            // $(".wallet_body").click(function() {
+            //     window.location = $(this).find("a").attr("href");
+            //     return false;
+            // });
 
             //add wallet
             $("#add_wallet_btn").click(function () {
@@ -97,6 +101,7 @@
                         var wallet = '<div class="d-inline-block bg-dark  col-3 m-2 p-4 rounded wallet_body">\n' +
                             '<a href="wallet/'+ data.wallet_id +'"></a>'+
                             '<span class="delete_wallet_btn float-right"><img src="https://img.icons8.com/material-two-tone/40/000000/close-window.png"></span>\n' +
+                            '<div hidden id="wallet_id">'+ data.wallet_id +'</div>'+
                             '<p class="text-light">' + (data.wallet_name == null? " ":data.wallet_name) +'</p>' +
                             '<p class="text-light">' + (data.wallet_description == null? " ":data.wallet_description) +'</p>'+
                             '<span class="text-light">balance : '+data.balance+' '+data.currency+'</span>\n' +
@@ -122,14 +127,15 @@
                 });
             });
             //delete wallet
-            $(".delete_wallet_btn").click(function () {
 
+            $("#wallets").on('click','span',function () {
 
-                var id = parseInt(this.parentNode.childNodes.item(2).innerText);
+                var id = parseInt(this.parentNode.childNodes.item(4).innerText);
+                console.log(id);
                   var node = this.parentNode.parentNode;
                   var child_to_remove = this.parentNode;
 
-                console.log(id);
+
 
                 $.ajax({
                     type:'delete',
@@ -143,8 +149,9 @@
                    success: function(data) {
                         node.removeChild(child_to_remove);
                     },
-                    error: function (data) {
-                        console.log(data);
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(xhr.status);
+                        alert(thrownError);
                     }
 
                 });
