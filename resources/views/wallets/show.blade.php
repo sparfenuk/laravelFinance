@@ -12,7 +12,7 @@
      </div>
      <div id="balance_graph" class="col-md-5 d-inline-block">
 
-         <p>graph</p>
+         <div id="chart" style="width: 120%;max-width:1000px;margin: auto;"></div>
      </div>
 
      {{--incomes--}}
@@ -165,6 +165,9 @@
 
 @endsection
 @section('javascripts')
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="{{ asset('c3/c3.js') }}"></script>
+    <script src="{{ asset('c3/c3.min.js') }}"></script>
     <script>
 
         $(document).ready(function () {
@@ -251,5 +254,49 @@
                 });
             });
         });
+        function formatDate(date) {
+            return  date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear();
+        }
+
+        var data = [];
+        var dates = [];
+
+        for(var i = 0 ; i <= 12 ; i++) {
+            dates[i] = new Date();
+            dates[i].setMonth(dates[i].getMonth() + i);
+            dates[i] = formatDate(dates[i]);
+        }
+
+
+        dates.unshift("x");
+        data.unshift(dates);
+        console.log(dates);
+        var chart = c3.generate({
+            data: {
+                x: 'x',
+                columns: data,
+                type: 'line'
+            },
+            zoom: {
+                enabled: true
+            },
+            axis: {
+                x: {
+                    type: 'timeseries', 
+                    tick: {
+                        format: '%Y-%m-%d',
+                        rotate: -50,
+                        multiline: false,
+                    }
+                },
+                y: {
+                    label: { // ADD
+                        text: 'Amount',
+                        position: 'outer-middle'
+                    }
+                }
+            }
+        });
+
     </script>
 @endsection

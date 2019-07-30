@@ -102,7 +102,7 @@
             },
             axis: {
                 x: {
-                    type: 'timeseries', // this needed to load string x value
+                    type: 'timeseries',
                     tick: {
                         format: '%Y-%m-%d',
                         rotate: -50,

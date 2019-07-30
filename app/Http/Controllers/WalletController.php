@@ -221,6 +221,7 @@ class WalletController extends Controller
                 $periods = Period::all();
                // $enum_once_per = self::get_enum_values($incomes->getTable(),'once_per');
 
+
                 return view('wallets.show', [
                     'wallet' => $wallet,
                     'incomes' => $incomes,
