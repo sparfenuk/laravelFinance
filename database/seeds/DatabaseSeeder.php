@@ -67,9 +67,9 @@ class DatabaseSeeder extends Seeder
     public function create_default_user()
     {
         $user = new User;
-        $user->name = "default";
-        $user->email = "default@gmail.com";
-        $user->password = "default";
+        $user->name = 'default';
+        $user->email = 'default@gmail.com';
+        $user->password = Hash::make('default');
         $user->save();
     }
 

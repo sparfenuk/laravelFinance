@@ -32,7 +32,7 @@ class WalletController extends Controller
         {
             if (isset($request['wallet_id'])) {
                 Wallet::where('id', $request['wallet_id'])->delete();
-                return new JsonResponse(['succes' => $request['wallet_id']], 200);
+                return new JsonResponse(['success' => $request['wallet_id']], 200);
             }
         }
         else if($request->ajax()) {
@@ -159,7 +159,22 @@ class WalletController extends Controller
     public function show($id,Request $request)
     {
 
+
+        if($request->isMethod('delete') )
+        {
+            if (isset($request['income_id'])) {
+                Income::where('id', $request['income_id'])->delete();
+                return new JsonResponse(['success' => $request['income_id']], 200);
+            }
+            else if(isset($request['expense_id'])){
+                Expense::where('id', $request['expense_id'])->delete();
+                return new JsonResponse(['success' => $request['expense_id']], 200);
+
+            }
+        }
+
         if($request->ajax()) {
+
 
             $json = [];
 
@@ -180,6 +195,7 @@ class WalletController extends Controller
                 $income->save();
 
                 $json = [
+                    'income_id' => $income->id,
                     'income_name' => $income->name,
                     'income_description' => $income->description,
                     'income_period' => $income->period->name,
@@ -203,6 +219,7 @@ class WalletController extends Controller
                 $expense->save();
 
                 $json = [
+                    '$expense_id' => $expense->id,
                     'expense_name' => $expense->name,
                     'expense_description' => $expense->description,
                     'expense_period' => $expense->period->name,
@@ -221,6 +238,7 @@ class WalletController extends Controller
                 $periods = Period::all();
                // $enum_once_per = self::get_enum_values($incomes->getTable(),'once_per');
 
+                //return dd($incomes);
                 return view('wallets.show', [
                     'wallet' => $wallet,
                     'incomes' => $incomes,
