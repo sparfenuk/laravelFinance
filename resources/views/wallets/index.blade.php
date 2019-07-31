@@ -128,7 +128,7 @@
             });
             //delete wallet
 
-            $("#wallets").on('click','#delete_wallet_btn',function () {
+            $("#wallets").on('click','.delete_wallet_btn',function () {
 
                 var id = parseInt(this.parentNode.childNodes.item(4).innerText);
                 console.log(id);
