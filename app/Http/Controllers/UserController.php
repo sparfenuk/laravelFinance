@@ -21,25 +21,30 @@ class UserController extends Controller
         }
         return view('profile',array('user'=>Auth::user()));
     }
-    public function update_avatar(Request $request){
+    public function update(Request $request){
         $user = Auth::user();
-        $request->validate([
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed']
-        );
-        // Handle the user upload of avatar
+        //avatar
         if($request->hasFile('avatar')){
             $avatar = $request->file('avatar');
             $filename = time() . '.' . $avatar->getClientOriginalExtension();
             Image::make($avatar)->resize(300, 300)->save( public_path('/uploads/avatars/' . $filename ) );
             $user->avatar = $filename;
         }
-        if(trim($request->get("email")) != "" and $request->get("email") != $user->email)
-            $user->email = $request->get("email");
-        if(isEmpty($request->get("password")) == false)
+        $email = $request->get("email");
+        //email
+        if(trim($email) != "" and $email != $user->email)
+            $user->email = $email;
+        //password
+        $password = $request->get("password");
+        $password_confirmation = $request->get("password_confirmation");
+        if($password != "")
+        {
+            if($password != $password_confirmation)
+                return redirect("/profile")->with("errors",['confirmation'=> 'Password confirmation mismatch']);
             $user->password = bcrypt($request->get("password"));
+        }
         $user->save();
-        return redirect('home');
+        return redirect('/home')->with('success', 'Profile has been successfully updated!');
     }
 
 }

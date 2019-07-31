@@ -2,10 +2,20 @@
 
 @section('content')
     <div class="container">
+        @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors as $error)
+                            <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div><br />
+        @endif
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <h2>{{ $user->name }} Profile</h2>
                 <form enctype="multipart/form-data" action="/profile" method="POST">
+                    @method('PATCH')
                     @csrf
                     <div class="form-group">
                         <img src="/uploads/avatars/{{ $user->avatar }}" style="width:150px; height:150px; border-radius:50%; margin-right:25px;">
@@ -23,7 +33,7 @@
                         <label>Password confirmation</label>
                         <input type="password" name="password_confirmation" class="form-control">
                     </div>
-                    <input type="submit" class="pull-right btn btn-sm btn-primary">
+                    <input type="submit" class="btn btn-sm btn-primary">
                 </form>
             </div>
         </div>
