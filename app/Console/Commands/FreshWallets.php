@@ -47,7 +47,7 @@ class FreshWallets extends Command
                 $period = Period::find($income->period_id);
                 $now = new \DateTime("now");
                 $diffInHours = $now->diff(new \DateTime($income->updated_at))->h;
-                switch ($income->period->name) {
+                switch ($period->name) {
                     case "hour":
                         $value += $income->value * $diffInHours;
                         break;
@@ -77,7 +77,7 @@ class FreshWallets extends Command
                 $period = Period::find($expense->period_id);
                 $now = new \DateTime("now");
                 $diffInHours = $now->diff(new \DateTime($period->updated_at))->h;
-                switch ($expense->period->name) {
+                switch ($period->name) {
                     case "hour":
                         $value -= $expense->value * $diffInHours;
                         break;
