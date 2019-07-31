@@ -27,7 +27,6 @@ Route::get('profile','UserController@profile');
 
 Route::patch('profile','UserController@update');
 
-
 Route::any('/wallets','WalletController@index')->name('wallets');
 
 Route::any('/wallet/{id}','WalletController@show')->name('wallet');
