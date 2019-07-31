@@ -1,5 +1,10 @@
 @extends('layouts.app')
+@section('stylesheets')
+    {{--C3 styles--}}
+    <link href="{{ asset('c3/c3.css') }}" rel="stylesheet">
 
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+@endsection
 @section('content')
  <div class="container p-4" style="background-color:#e1e1e1">
 
@@ -11,7 +16,6 @@
          <p class="font-weight-bold  text-wallet-info">Balance: {{$wallet->balance}}</p>
      </div>
      <div id="balance_graph" class="col-md-5 d-inline-block">
-
          <div id="chart" style="width: 120%;max-width:1000px;margin: auto;"></div>
      </div>
 
@@ -223,7 +227,7 @@
                var child_to_remove = this.parentNode.parentNode;
 
                 //console.log(id);
-        
+
                 $.ajax({
                     'type':'delete_income',
                     method:'delete',
@@ -241,7 +245,7 @@
                         alert(thrownError);
                     }
                 });
-                
+
 
             });
 
@@ -317,50 +321,129 @@
 
 
             });
-        });
-        function formatDate(date) {
-            return  date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear();
-        }
 
-        var data = [];
-        var dates = [];
+            // function formatDate(date) {
+            //     var months = [
+            //         '01', "01", "02", "03",
+            //         "04", "03", "06",
+            //         "07", "08", "09",
+            //         "10", "11", "12",
+            //     ];
+            //     return date.getFullYear() + '-' + months[date.getMonth()] + '-' + date.getDate();
+            // }
+            // for (var i = 0; i <= 12; i++) {
+            //     dates[i] = new Date();
+            //     dates[i].setDate(1);
+            //     dates[i].setMonth(dates[i].getMonth() + i);
+            //     dates[i] = formatDate(dates[i]);
+            // }
+            var data = [];
+            var values = [];
+            var incomes = {!! json_encode($incomes) !!};
+            var expenses = {!! json_encode($expenses) !!};
+            var dates = {!! json_encode($dates) !!};
+            // var currentDate = new Date().toISOString().slice(0, 10);
 
-        for(var i = 0 ; i <= 12 ; i++) {
-            dates[i] = new Date();
-            dates[i].setMonth(dates[i].getMonth() + i);
-            dates[i] = formatDate(dates[i]);
-        }
+
+            //"2019-07-31 07:14:07"
 
 
-        dates.unshift("x");
-        data.unshift(dates);
-        console.log(dates);
-        var chart = c3.generate({
-            data: {
-                x: 'x',
-                columns: data,
-                type: 'line'
-            },
-            zoom: {
-                enabled: true
-            },
-            axis: {
-                x: {
-                    type: 'timeseries', 
-                    tick: {
-                        format: '%Y-%m-%d',
-                        rotate: -50,
-                        multiline: false,
+
+
+            for(var i = 0 ; i<= 12 ; i++){
+                var value = 0;
+                incomes.forEach(function (income) {
+                    var diffInHours = Math.abs(((new Date(dates[i])  - new Date(income.period.updated_at)) / (1000 * 60 * 60)).toFixed());
+                    switch (income.period.name) {
+                        case "hour":
+                            value += income.value * diffInHours;
+                            break;
+                        case "day":
+                            value += income.value * (diffInHours/24).toFixed();
+                            break;
+                        case "week":
+                            value += income.value * (diffInHours/168).toFixed();
+                            break;
+                        case "2weeks":
+                            value += income.value * (diffInHours/336).toFixed();
+                            break;
+                        case "4weeks":
+                            value += income.value * (diffInHours/672).toFixed();
+                            break;
+                        case "month":
+                            value += income.value * (diffInHours/720).toFixed();
+                            break;
+                        case "year":
+                            value += income.value * (diffInHours/8760).toFixed();
+                            break;
                     }
+                });
+                expenses.forEach(function (expense) {
+                    var diffInHours = Math.abs(((new Date(dates[i])  - new Date(expense.period.updated_at)) / (1000 * 60 * 60)).toFixed());
+                    switch (expense.period.name) {
+                        case "hour":
+                            value -= expense.value * diffInHours;
+                            break;
+                        case "day":
+                            value -= expense.value * (diffInHours/24).toFixed();
+                            break;
+                        case "week":
+                            value -= expense.value * (diffInHours/168).toFixed();
+                            break;
+                        case "2weeks":
+                            value -= expense.value * (diffInHours/336).toFixed();
+                            break;
+                        case "4weeks":
+                            value -= expense.value * (diffInHours/672).toFixed();
+                            break;
+                        case "month":
+                            value -= expense.value * (diffInHours/720).toFixed();
+                            break;
+                        case "year":
+                            value -= expense.value * (diffInHours/8760).toFixed();
+                            break;
+                    }
+                });
+
+
+                values.push(value);
+                {{--values[i] = {!! $wallet->balance !!} * (i+1);--}}
+            }
+
+            dates.unshift("x");
+            data.unshift(dates);
+
+            console.log(values);
+            values.unshift('{!! $currency !!}');
+            data.push(values);
+            console.log(data);
+            var chart = c3.generate({
+                data: {
+                    x: 'x',
+                    columns: data,
+                    type: 'line'
                 },
-                y: {
-                    label: { // ADD
-                        text: 'Amount',
-                        position: 'outer-middle'
+                zoom: {
+                    enabled: true
+                },
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: '%Y-%m-%d',
+                            rotate: -50,
+                            multiline: false,
+                        }
+                    },
+                    y: {
+                        label: { // ADD
+                            text: 'Amount',
+                            position: 'outer-middle'
+                        }
                     }
                 }
-            }
-        });
+            });
+        })
 
     </script>
 @endsection

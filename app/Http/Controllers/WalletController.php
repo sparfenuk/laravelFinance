@@ -237,13 +237,19 @@ class WalletController extends Controller
                 $expenses = $wallet->expenses;
                 $periods = Period::all();
                // $enum_once_per = self::get_enum_values($incomes->getTable(),'once_per');
+                $currency = Currency::find($wallet->currency_id)->currency;
 
-                //return dd($incomes);
+                $dates = [];
+                for($i = 0 ; $i <= 12; $i++)
+                    $dates[$i] = date("Y-m-d", strtotime("+{$i} months"));
+
                 return view('wallets.show', [
                     'wallet' => $wallet,
                     'incomes' => $incomes,
                     'expenses' => $expenses,
                     'periods' => $periods,
+                    'currency' => $currency,
+                    'dates' => $dates,
                 ]);
             }
             else
