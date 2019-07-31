@@ -256,7 +256,7 @@ class WalletController extends Controller
             return  redirect('wallets');
         }
         else
-            abort(404);
+            abort(404);//abort eto greh
     }
 
 //   public static function get_enum_values( $table, $field )
