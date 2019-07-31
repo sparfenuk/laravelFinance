@@ -101,7 +101,7 @@
                      <label for="income_value">amount of income</label>
                      <input id="income_value" class="form-control m-bot15" type="number" name="income_value"/>
 
-                     <label>{{ __('currency') }}</label>
+                     <label>{{ __('frequency') }}</label>
                      <select id="period_id_income" class="form-control m-bot15" name="period_id">
                          @if($periods->count() > 0)
                              @foreach($periods as $period)
@@ -147,7 +147,7 @@
                      <input id="expense_value" class="form-control m-bot15" type="number" name="expense_value"/>
 
 
-                     <label>{{ __('period') }}</label>
+                     <label>{{ __('frequency') }}</label>
                      <select id="period_id_expense" class="form-control m-bot15" name="period_id">
                          @if($periods->count() > 0)
                              @foreach($periods as $period)
