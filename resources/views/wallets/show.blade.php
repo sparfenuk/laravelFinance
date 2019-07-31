@@ -258,7 +258,7 @@
                         'expense_name': $("#expense_name").val(),
                         'expense_description':$("#expense_description").val(),
                         'expense_value':$("#expense_value").val(),
-                        'period_id':$("#period_id_income").val(),
+                        'period_id':$("#period_id_expense").val(),
                         'wallet_id':$("#wallet_id").val(),
                     },
                     success: function (data) {
